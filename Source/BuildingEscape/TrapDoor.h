@@ -32,5 +32,7 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* TrapDoorTrigger = nullptr;
+
+	void OpenTrapDoor();
 	
 };

@@ -51,9 +51,17 @@ void UTrapDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 
 	if (TotalMass < 1.0f)
-		GetOwner()->SetActorRotation(FRotator(50.f, 0.f, 00.f));
-	
+	{
+		//GetOwner()->SetActorRotation(FRotator(50.f, 0.f, 0.f));
+		OpenTrapDoor();
+		
+	}
 
 	// ...
+}
+
+void UTrapDoor::OpenTrapDoor()
+{
+	OnOpenTrapDoor.Broadcast();
 }
 
