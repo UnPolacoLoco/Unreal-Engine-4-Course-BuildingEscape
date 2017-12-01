@@ -10,7 +10,6 @@ UGrabber::UGrabber()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
@@ -40,6 +39,8 @@ void UGrabber::SetupInputComponent()
 	{
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+		InputComponent->BindAction("Throw", IE_Pressed, this, &UGrabber::Throw);
+		
 	}
 	else
 	{
@@ -65,19 +66,33 @@ void UGrabber::Grab() {
 	/// LINE TRACE and see if we reach any actors with physics body collision channel set
 	auto HitResult = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitResult.GetComponent(); // gets the mesh in our case
-	auto ActorHit = HitResult.GetActor();
+	ActorHit = HitResult.GetActor();
 
 	/// If we hit something then attach a physics handle
 	if (ActorHit)
 	{
 		if (!PhysicsHandle) { return; }
-		PhysicsHandle->GrabComponent(
+		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			ComponentToGrab,
 			NAME_None, // no bones needed
 			ComponentToGrab->GetOwner()->GetActorLocation(),
-			true // allow rotation
+			FRotator(0) // allow rotation
 		);
 	}
+}
+
+void UGrabber::Throw()
+{
+	if (!ActorHit) { return; }
+
+	UPrimitiveComponent* Throwable = ActorHit->FindComponentByClass<UPrimitiveComponent>();
+
+	if (Throwable)
+	{
+		Release();
+		Throwable->AddImpulse(GetPlayerViewPointRotation() * ThrowStrenght, NAME_None, false);
+	}
+
 }
 
 void UGrabber::Release()
@@ -110,6 +125,17 @@ FVector UGrabber::GetReachLineStart()
 		OUT PlayerViewPointRotation
 	);
 	return PlayerViewPointLocation;
+}
+
+FVector UGrabber::GetPlayerViewPointRotation()
+{
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+	);
+	return PlayerViewPointRotation.Vector();
 }
 
 FVector UGrabber::GetReachLineEnd()

@@ -3,6 +3,11 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/Components/InputComponent.h"
+#include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
+#include "Runtime/Engine/Classes/PhysicsEngine/PhysicsHandleComponent.h"
+#include "Runtime/Core/Public/Math/Vector.h"
 #include "Grabber.generated.h"
 
 
@@ -26,13 +31,20 @@ public:
 private:
 	// How far ahead of the player can we reach in cm
 	float Reach = 100.f;
+
+	float ThrowStrenght = 10000.f;
 	
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
 
+	AActor* ActorHit = nullptr;
+
 	// Ray-cast and grab what's in reach
 	void Grab();
+
+	// Throw currently held PhysicsBody
+	void Throw();
 
 	// Called when grab is released
 	void Release();
@@ -48,6 +60,8 @@ private:
 
 	// Returns current start of reach line
 	FVector GetReachLineStart();
+
+	FVector GetPlayerViewPointRotation();
 
 	// Returns current end of reach line
 	FVector GetReachLineEnd();
