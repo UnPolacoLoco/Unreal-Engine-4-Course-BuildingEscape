@@ -1,4 +1,4 @@
-// Copyright Ben Tristem 2016.
+// Copyright Rafal Boguszewski 2017, Course content by Ben Tristem  
 
 #pragma once
 

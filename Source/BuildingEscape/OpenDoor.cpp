@@ -1,4 +1,4 @@
-// Copyright Ben Tristem 2016.
+// Copyright Rafal Boguszewski 2017, Course content by Ben Tristem  
 
 #include "BuildingEscape.h"
 #include "OpenDoor.h"
@@ -57,7 +57,7 @@ float UOpenDoor::GetTotalMassOfActorsOnPlate()
 	for (const auto& Actor : OverlappingActors)
 	{
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-		UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *Actor->GetName())
+		///UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *Actor->GetName())
 	}
 
 	return TotalMass;
