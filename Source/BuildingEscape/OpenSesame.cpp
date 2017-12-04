@@ -39,15 +39,12 @@ void UOpenSesame::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	
 	if (!BullsEye) { return; }
 	
-	BullsEye->GetOverlappingActors(ActorsHittingBullsEye);
+	BullsEye->GetOverlappingActors(OUT ActorsHittingBullsEye);
 
 	for (auto Balls : ActorsHittingBullsEye)
 	{
 		if (Balls->FindComponentByClass<UPrimitiveComponent>()->GetMass() > 4.f)
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("BullsEye hit!"));
-
-			//GetOwner()->SetActorLocation(FVector(-1470.0, 490.0, 281.0));
 
 			OnOpenSesame.Broadcast();
 		}
